@@ -4,7 +4,9 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract PMToken is ERC20 {
-    constructor() ERC20("Pomodoro Mate Token", "PMT") {
-        _mint(msg.sender, 100000000 * (10**18));
+    constructor(address initialAccount, uint256 initialBalance)
+        ERC20("Pomodoro Mate Token", "PMT")
+    {
+        _mint(initialAccount, initialBalance);
     }
 }
