@@ -1,0 +1,35 @@
+{
+  "name": "pomodoro-mate-sc",
+  "version": "0.0.1",
+  "description": "Smart contracts for Pomodoro Mate",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test",
+    "build": "truffle build",
+    "compile": "truffle compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farinalvaro/pomodoro-mate-sc.git"
+  },
+  "keywords": [
+    "POMODORO",
+    "MATE",
+    "FOCUS"
+  ],
+  "author": {
+    "name": "Alvaro Fariña",
+    "email": "farinalvaro@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/farinalvaro/pomodoro-mate-sc/issues"
+  },
+  "homepage": "https://github.com/farinalvaro/pomodoro-mate-sc#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.1.0"
+  }
+}
