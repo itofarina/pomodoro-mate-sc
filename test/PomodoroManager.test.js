@@ -17,7 +17,7 @@ const PMToken = artifacts.require('PMToken')
 contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
   let pmToken, pomodoroManager
   const initialSupply = 100000000
-  const managerInitialBalance = 100
+  const managerInitialBalance = 2
 
   before(async () => {
     // Load Contracts
@@ -56,8 +56,9 @@ contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
   })
 
   describe('Redeem tokens', async () => {
+    let receipt
     before(async () => {
-      await pomodoroManager.redeemToken(randomDoer1)
+      receipt = await pomodoroManager.redeemToken(randomDoer1)
     })
 
     it('should give a token to random doer', async () => {
@@ -65,15 +66,38 @@ contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
       expect(randomDoerBalance.toString()).to.eql('1')
     })
 
-    it('contract should have 1 less token', async () => { })
+    it('should emit Redeemed', () => {
+      expectEvent(receipt, 'Redeemed', {
+        doer: randomDoer1,
+      })
+    })
 
-    it('should add account to doers', async () => { })
+    it('manager should have 1 less token', async () => {
+      const pomoBalance = await pmToken.balanceOf(pomodoroManager.address)
+      expect(pomoBalance.toString()).to.eql(`${managerInitialBalance - 1}`)
+    })
 
-    it('doer should have 1 pomodoro completed', async () => { })
+    it('should add account to doers', async () => {
+      const doers = await pomodoroManager.getAllDoers()
+      expect(doers).to.include(randomDoer1)
+    })
+
+    it('doer should have 1 pomodoro completed', async () => {
+      const pomosCompleted = await pomodoroManager.pomodorosCompleted(randomDoer1)
+      expect(pomosCompleted.toString()).to.eql('1')
+    })
 
     it('should reject giving 1 more before 30 minutes to the same account', () => { })
 
-    it('should give 1 token to another random doer', () => { })
+    it('should give 1 token to another random doer', async () => {
+      const receipt2 = await pomodoroManager.redeemToken(randomDoer2)
+      const getDoers = await pomodoroManager.getAllDoers()
+      expect(getDoers.length).to.eql(2)
+      expectEvent(receipt2, 'Redeemed', {
+        doer: randomDoer2,
+      })
+    })
+
   })
 
 })
