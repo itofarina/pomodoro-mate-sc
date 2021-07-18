@@ -30,11 +30,12 @@ contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
   let pmToken, pomodoroManager
   const initialSupply = 100000000
   const managerInitialBalance = 2
+  const sessionLengthMinutes = 25
 
   before(async () => {
     // Load Contracts
     pmToken = await PMToken.new(owner, initialSupply)
-    pomodoroManager = await PomodoroManager.new(pmToken.address, { from: owner })
+    pomodoroManager = await PomodoroManager.new(pmToken.address, sessionLengthMinutes, { from: owner })
 
     // Send tokens to pomodoro manager contract
     await pmToken.transfer(pomodoroManager.address, managerInitialBalance, { from: owner })
@@ -64,6 +65,12 @@ contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
     it('has initial balance', async () => {
       const balance = await pmToken.balanceOf(pomodoroManager.address)
       expect(balance.toString()).to.eql(managerInitialBalance.toString())
+    })
+
+    it('has proper session length', async () => {
+      const sessionMinutes = await pomodoroManager.sessionLengthMinutes()
+
+      expect(sessionMinutes.toString()).to.eql(sessionLengthMinutes.toString())
     })
   })
 
