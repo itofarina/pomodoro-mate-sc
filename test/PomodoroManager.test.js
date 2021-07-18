@@ -14,6 +14,18 @@ const { expect } = require('chai')
 const PomodoroManager = artifacts.require('PomodoroManager')
 const PMToken = artifacts.require('PMToken')
 
+// TODO: move to utils
+// const id = 0
+// const jsonrpc = '2.0'
+// const send = (method, params = []) =>
+//   web3.currentProvider.send({ id, jsonrpc, method, params })
+// const timeTravel = async seconds => {
+//   await send('evm_increaseTime', [seconds])
+//   await send('evm_mine')
+// }
+// TODO: works but check this for better approach: https://forum.openzeppelin.com/t/how-to-simulate-a-date-in-the-future-with-truffle-tests/908/3
+
+
 contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
   let pmToken, pomodoroManager
   const initialSupply = 100000000
@@ -87,7 +99,14 @@ contract('PomodoroManager', ([owner, randomDoer1, randomDoer2]) => {
       expect(pomosCompleted.toString()).to.eql('1')
     })
 
-    it('should reject giving 1 more before 30 minutes to the same account', () => { })
+    // it('should reject giving 1 more before 25 minutes to the same account', async () => {
+    // await timeTravel(60)
+    // await expectRevert(
+    //   pomodoroManager.redeemToken(randomDoer1),
+    //   "Pomodoro Manager: Tokens can only be redeemed in 25 minutes period"
+    // )
+    // await expect(pmToken.balanceOf(randomDoer1).toString()).to.be.eql('1')
+    // })
 
     it('should give 1 token to another random doer', async () => {
       const receipt2 = await pomodoroManager.redeemToken(randomDoer2)
